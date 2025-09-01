@@ -8,33 +8,61 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* G.O.D.I Design System - Soft & Modern Palette */
+    --background: 214 100% 97%;
+    --foreground: 213 27% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 213 27% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 213 27% 14%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Soft Blue */
+    --primary: 213 94% 68%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 213 94% 60%;
+    --primary-light: 213 100% 95%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Soft Green */
+    --secondary: 152 69% 74%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 152 69% 66%;
+    --secondary-light: 152 100% 95%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted - Warm Gray */
+    --muted: 213 27% 96%;
+    --muted-foreground: 213 10% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Soft Purple */
+    --accent: 266 85% 82%;
+    --accent-foreground: 266 15% 15%;
+    --accent-light: 266 100% 97%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Warning - Soft Orange */
+    --warning: 31 81% 72%;
+    --warning-foreground: 0 0% 100%;
+    --warning-light: 31 100% 96%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Success - Enhanced Green */
+    --success: 142 71% 65%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 100% 95%;
+
+    /* Destructive - Soft Red */
+    --destructive: 0 84% 73%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 213 27% 88%;
+    --input: 213 27% 92%;
+    --ring: 213 94% 68%;
+
+    /* Custom G.O.D.I Variables */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-soft: linear-gradient(135deg, hsl(var(--primary-light)), hsl(var(--accent-light)));
+    --shadow-soft: 0 4px 20px -4px hsl(var(--primary) / 0.15);
+    --shadow-card: 0 2px 8px -1px hsl(213 27% 84% / 0.3);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;
 

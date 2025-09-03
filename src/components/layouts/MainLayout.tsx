@@ -8,23 +8,27 @@ import {
   BarChart3,
   Settings,
   Menu,
-  X
+  X,
+  Languages
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Inventory", href: "/inventory", icon: Package },
-  { name: "POS", href: "/pos", icon: ShoppingCart },
-  { name: "Users", href: "/users", icon: Users },
-  { name: "Reports", href: "/reports", icon: BarChart3 },
-  { name: "Settings", href: "/settings", icon: Settings },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const currentPath = window.location.pathname;
+  const { t, toggleLanguage, language } = useLanguage();
+
+  const navigation = [
+    { name: t('dashboard'), href: "/", icon: LayoutDashboard },
+    { name: t('inventory'), href: "/inventory", icon: Package },
+    { name: t('pos'), href: "/pos", icon: ShoppingCart },
+    { name: t('users'), href: "/users", icon: Users },
+    { name: t('reports'), href: "/reports", icon: BarChart3 },
+    { name: t('settings'), href: "/settings", icon: Settings },
+  ];
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -47,7 +51,7 @@ export function MainLayout() {
               <X className="h-5 w-5" />
             </Button>
           </div>
-          <nav className="mt-8 px-4">
+          <nav className="mt-8 px-4 flex-1">
             {navigation.map((item) => {
               const isActive = currentPath === item.href;
               return (
@@ -67,6 +71,19 @@ export function MainLayout() {
               );
             })}
           </nav>
+          
+          {/* Language Toggle */}
+          <div className="px-4 pb-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleLanguage}
+              className="w-full"
+            >
+              <Languages className="mr-2 h-4 w-4" />
+              {language === 'en' ? 'Filipino' : 'English'}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -98,6 +115,19 @@ export function MainLayout() {
               );
             })}
           </nav>
+          
+          {/* Language Toggle */}
+          <div className="px-4 pb-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleLanguage}
+              className="w-full"
+            >
+              <Languages className="mr-2 h-4 w-4" />
+              {language === 'en' ? 'Filipino' : 'English'}
+            </Button>
+          </div>
         </div>
       </div>
 

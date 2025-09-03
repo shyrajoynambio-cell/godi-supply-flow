@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Package, ShoppingCart, TrendingUp } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import heroImage from "@/assets/school-supplies-hero.jpg";
 
 const recentActivity = [
@@ -13,30 +14,31 @@ const recentActivity = [
 ];
 
 const topProducts = [
-  { name: "Spiral Notebooks", sales: 156, revenue: "$1,248", trend: "+12%" },
-  { name: "Ballpoint Pens", sales: 89, revenue: "$267", trend: "+8%" },
-  { name: "Colored Pencils", sales: 67, revenue: "$402", trend: "+15%" },
-  { name: "Erasers", sales: 45, revenue: "$90", trend: "+3%" }
+  { name: "Spiral Notebooks", sales: 156, revenue: "₱1,248", trend: "+12%" },
+  { name: "Ballpoint Pens", sales: 89, revenue: "₱267", trend: "+8%" },
+  { name: "Colored Pencils", sales: 67, revenue: "₱402", trend: "+15%" },
+  { name: "Erasers", sales: 45, revenue: "₱90", trend: "+3%" }
 ];
 
 export default function Dashboard() {
+  const { t } = useLanguage();
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-primary p-8 text-white">
         <div className="relative z-10">
-          <h1 className="text-3xl font-bold mb-2">Welcome to G.O.D.I</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('welcome')}</h1>
           <p className="text-white/90 mb-6">
-            Your complete inventory management solution for school supplies
+            {t('welcomeDesc')}
           </p>
           <div className="flex gap-3">
             <Button variant="secondary" className="bg-white text-primary hover:bg-white/90">
               <Plus className="mr-2 h-4 w-4" />
-              Add Product
+              {t('addProduct')}
             </Button>
             <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
               <ShoppingCart className="mr-2 h-4 w-4" />
-              Quick Sale
+              {t('quickSale')}
             </Button>
           </div>
         </div>
@@ -58,7 +60,7 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-primary" />
-              Recent Activity
+              {t('recentActivity')}
             </CardTitle>
             <CardDescription>Latest updates from your store</CardDescription>
           </CardHeader>
@@ -90,7 +92,7 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Package className="h-5 w-5 text-secondary" />
-              Top Products
+              {t('topProducts')}
             </CardTitle>
             <CardDescription>Best performing items this month</CardDescription>
           </CardHeader>

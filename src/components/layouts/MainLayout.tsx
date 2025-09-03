@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -8,40 +8,23 @@ import {
   BarChart3,
   Settings,
   Menu,
-  X,
-  Languages
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/contexts/AuthContext";
-import { SettingsDialog } from "@/components/settings/SettingsDialog";
-import { TutorialOverlay } from "@/components/tutorial/TutorialOverlay";
+
+const navigation = [
+  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Inventory", href: "/inventory", icon: Package },
+  { name: "POS", href: "/pos", icon: ShoppingCart },
+  { name: "Users", href: "/users", icon: Users },
+  { name: "Reports", href: "/reports", icon: BarChart3 },
+  { name: "Settings", href: "/settings", icon: Settings },
+];
 
 export function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
   const currentPath = window.location.pathname;
-  const { t, toggleLanguage, language } = useLanguage();
-  const { user, profile } = useAuth();
-
-  useEffect(() => {
-    // Show tutorial for first-time users
-    const hasSeenTutorial = localStorage.getItem('godi-tutorial-completed');
-    if (user && !hasSeenTutorial) {
-      setShowTutorial(true);
-    }
-  }, [user]);
-
-  const navigation = [
-    { name: t('dashboard'), href: "/", icon: LayoutDashboard },
-    { name: t('inventory'), href: "/inventory", icon: Package },
-    { name: t('pos'), href: "/pos", icon: ShoppingCart },
-    { name: t('users'), href: "/users", icon: Users },
-    { name: t('reports'), href: "/reports", icon: BarChart3 },
-    { name: t('settings'), href: "/settings", icon: Settings },
-  ];
-
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,7 +47,7 @@ export function MainLayout() {
               <X className="h-5 w-5" />
             </Button>
           </div>
-          <nav className="mt-8 px-4 flex-1">
+          <nav className="mt-8 px-4">
             {navigation.map((item) => {
               const isActive = currentPath === item.href;
               return (
@@ -84,20 +67,6 @@ export function MainLayout() {
               );
             })}
           </nav>
-          
-          {/* Settings and Language Toggle */}
-          <div className="px-4 pb-4 space-y-2">
-            <SettingsDialog onStartTutorial={() => setShowTutorial(true)} />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleLanguage}
-              className="w-full"
-            >
-              <Languages className="mr-2 h-4 w-4" />
-              {language === 'en' ? 'Filipino' : 'English'}
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -129,20 +98,6 @@ export function MainLayout() {
               );
             })}
           </nav>
-          
-          {/* Settings and Language Toggle */}
-          <div className="px-4 pb-4 space-y-2">
-            <SettingsDialog onStartTutorial={() => setShowTutorial(true)} />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleLanguage}
-              className="w-full"
-            >
-              <Languages className="mr-2 h-4 w-4" />
-              {language === 'en' ? 'Filipino' : 'English'}
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -170,16 +125,6 @@ export function MainLayout() {
           <Outlet />
         </main>
       </div>
-
-      {/* Tutorial Overlay */}
-      <TutorialOverlay
-        isOpen={showTutorial}
-        onClose={() => setShowTutorial(false)}
-        onComplete={() => {
-          setShowTutorial(false);
-          localStorage.setItem('godi-tutorial-completed', 'true');
-        }}
-      />
     </div>
   );
 }

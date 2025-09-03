@@ -6,15 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Search, Plus, Minus, ShoppingCart, Trash2, Receipt, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 const quickAddProducts = [
-  { id: 1, name: "Blue Pen", price: 19.99, category: "Writing" },
-  { id: 2, name: "Notebook", price: 59.99, category: "Notebooks" },
-  { id: 3, name: "Eraser", price: 9.99, category: "Accessories" },
-  { id: 4, name: "Pencil", price: 15.99, category: "Writing" },
-  { id: 5, name: "Ruler", price: 39.99, category: "Accessories" },
-  { id: 6, name: "Colored Pencils", price: 119.99, category: "Art Supplies" }
+  { id: 1, name: "Blue Pen", price: 0.99, category: "Writing" },
+  { id: 2, name: "Notebook", price: 2.99, category: "Notebooks" },
+  { id: 3, name: "Eraser", price: 0.49, category: "Accessories" },
+  { id: 4, name: "Pencil", price: 0.79, category: "Writing" },
+  { id: 5, name: "Ruler", price: 1.99, category: "Accessories" },
+  { id: 6, name: "Colored Pencils", price: 5.99, category: "Art Supplies" }
 ];
 
 interface CartItem {
@@ -29,7 +28,6 @@ export default function POS() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
-  const { t } = useLanguage();
 
   const addToCart = (product: typeof quickAddProducts[0]) => {
     setCart(prevCart => {
@@ -97,7 +95,7 @@ export default function POS() {
 
     toast({
       title: "Sale completed successfully!",
-      description: `Total: ₱${total.toFixed(2)} - Receipt printed`,
+      description: `Total: $${total.toFixed(2)} - Receipt printed`,
     });
     
     clearCart();
@@ -115,8 +113,8 @@ export default function POS() {
         <div className="lg:col-span-2 space-y-6">
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-bold">{t('pointOfSale')}</h1>
-            <p className="text-muted-foreground">{t('quickCheckout')}</p>
+            <h1 className="text-3xl font-bold">Point of Sale</h1>
+            <p className="text-muted-foreground">Quick checkout for in-store purchases</p>
           </div>
 
           {/* Search */}
@@ -125,7 +123,7 @@ export default function POS() {
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder={t('searchProducts')}
+                  placeholder="Search products..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -137,10 +135,10 @@ export default function POS() {
           {/* Quick Add Products */}
           <Card className="shadow-card border-0">
             <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5 text-primary" />
-              {t('quickAddProducts')}
-            </CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <ShoppingCart className="h-5 w-5 text-primary" />
+                Quick Add Products
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
@@ -156,7 +154,7 @@ export default function POS() {
                         <Badge variant="outline" className="mb-2 text-xs">
                           {product.category}
                         </Badge>
-                        <p className="text-lg font-bold text-primary">₱{product.price}</p>
+                        <p className="text-lg font-bold text-primary">${product.price}</p>
                         <Button size="sm" className="mt-2 w-full">
                           <Plus className="mr-1 h-3 w-3" />
                           Add
@@ -177,7 +175,7 @@ export default function POS() {
               <CardTitle className="flex items-center justify-between">
                 <span className="flex items-center gap-2">
                   <ShoppingCart className="h-5 w-5 text-secondary" />
-                  {t('cart')} ({cart.length})
+                  Cart ({cart.length})
                 </span>
                 {cart.length > 0 && (
                   <Button 
@@ -205,7 +203,7 @@ export default function POS() {
                       <div key={item.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                         <div className="flex-1">
                           <h4 className="font-medium text-sm">{item.name}</h4>
-                          <p className="text-xs text-muted-foreground">₱{item.price} {t('each')}</p>
+                          <p className="text-xs text-muted-foreground">${item.price} each</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <Button
@@ -229,7 +227,7 @@ export default function POS() {
                           </Button>
                         </div>
                         <div className="text-right ml-3">
-                          <p className="font-semibold text-sm">₱{item.total.toFixed(2)}</p>
+                          <p className="font-semibold text-sm">${item.total.toFixed(2)}</p>
                           <Button
                             variant="ghost"
                             size="sm"
@@ -248,17 +246,17 @@ export default function POS() {
                   {/* Totals */}
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span>{t('subtotal')}:</span>
-                      <span>₱{subtotal.toFixed(2)}</span>
+                      <span>Subtotal:</span>
+                      <span>${subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span>{t('tax')}:</span>
-                      <span>₱{tax.toFixed(2)}</span>
+                      <span>Tax (8%):</span>
+                      <span>${tax.toFixed(2)}</span>
                     </div>
                     <Separator />
                     <div className="flex justify-between font-bold">
-                      <span>{t('total')}:</span>
-                      <span>₱{total.toFixed(2)}</span>
+                      <span>Total:</span>
+                      <span>${total.toFixed(2)}</span>
                     </div>
                   </div>
 
@@ -269,7 +267,7 @@ export default function POS() {
                       onClick={processSale}
                     >
                       <CreditCard className="mr-2 h-4 w-4" />
-                      {t('processPayment')}
+                      Process Payment
                     </Button>
                     <Button 
                       variant="outline" 
@@ -280,7 +278,7 @@ export default function POS() {
                       })}
                     >
                       <Receipt className="mr-2 h-4 w-4" />
-                      {t('printReceipt')}
+                      Print Receipt
                     </Button>
                   </div>
                 </>

@@ -1,19 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, Package, AlertTriangle, DollarSign, Users } from "lucide-react";
-import { useNotificationSound } from "@/hooks/useNotificationSound";
-import { useEffect } from "react";
 
 const stats = [
   {
     title: "Total Products",
-    value: "1,247", 
+    value: "1,247",
     change: "+12%",
     trend: "up" as const,
     icon: Package,
     color: "primary" as const
   },
   {
-    title: "Low Stock Items",
+    title: "Low Stock Alerts",
     value: "23",
     change: "-5%", 
     trend: "down" as const,
@@ -22,7 +20,7 @@ const stats = [
   },
   {
     title: "Daily Revenue",
-    value: "₱2,847",
+    value: "$2,847",
     change: "+18%",
     trend: "up" as const,
     icon: DollarSign,
@@ -39,16 +37,6 @@ const stats = [
 ];
 
 export function DashboardStats() {
-  const { playNotificationSound } = useNotificationSound();
-  
-  useEffect(() => {
-    // Check for critical stock items and play sound
-    const criticalItems = stats.find(stat => stat.title === "Low Stock Items")?.value;
-    if (criticalItems && parseInt(criticalItems.toString()) > 0) {
-      playNotificationSound();
-    }
-  }, [playNotificationSound]);
-
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (

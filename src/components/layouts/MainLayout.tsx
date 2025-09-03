@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -14,11 +14,24 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { SettingsDialog } from "@/components/settings/SettingsDialog";
+import { TutorialOverlay } from "@/components/tutorial/TutorialOverlay";
 
 export function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const currentPath = window.location.pathname;
   const { t, toggleLanguage, language } = useLanguage();
+  const { user, profile } = useAuth();
+
+  useEffect(() => {
+    // Show tutorial for first-time users
+    const hasSeenTutorial = localStorage.getItem('godi-tutorial-completed');
+    if (user && !hasSeenTutorial) {
+      setShowTutorial(true);
+    }
+  }, [user]);
 
   const navigation = [
     { name: t('dashboard'), href: "/", icon: LayoutDashboard },
@@ -72,8 +85,9 @@ export function MainLayout() {
             })}
           </nav>
           
-          {/* Language Toggle */}
-          <div className="px-4 pb-4">
+          {/* Settings and Language Toggle */}
+          <div className="px-4 pb-4 space-y-2">
+            <SettingsDialog onStartTutorial={() => setShowTutorial(true)} />
             <Button
               variant="outline"
               size="sm"
@@ -116,8 +130,9 @@ export function MainLayout() {
             })}
           </nav>
           
-          {/* Language Toggle */}
-          <div className="px-4 pb-4">
+          {/* Settings and Language Toggle */}
+          <div className="px-4 pb-4 space-y-2">
+            <SettingsDialog onStartTutorial={() => setShowTutorial(true)} />
             <Button
               variant="outline"
               size="sm"
@@ -155,6 +170,16 @@ export function MainLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Tutorial Overlay */}
+      <TutorialOverlay
+        isOpen={showTutorial}
+        onClose={() => setShowTutorial(false)}
+        onComplete={() => {
+          setShowTutorial(false);
+          localStorage.setItem('godi-tutorial-completed', 'true');
+        }}
+      />
     </div>
   );
 }

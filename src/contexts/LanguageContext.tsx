@@ -73,7 +73,7 @@ const translations = {
   fil: {
     // Navigation
     dashboard: 'Dashboard',
-    inventory: 'Imbentaryo',
+    inventory: 'Paninda',
     pos: 'POS',
     users: 'Mga User',
     reports: 'Mga Ulat',

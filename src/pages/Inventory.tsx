@@ -1,265 +1,138 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, Package, Edit, Trash2, Filter, Upload, Image } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const mockInventory = [
-  { 
-    id: 1, 
-    name: "Premium Spiral Notebooks", 
-    category: "Notebooks", 
-    stock: 145, 
-    price: 159.99, 
-    supplier: "SchoolMax",
-    status: "In Stock",
-    lastUpdated: "2024-01-15",
-    image: "/placeholder.svg"
+  {
+    id: 1,
+    name: "SPIRAL NOTEBOOK",
+    totalStock: 20,
+    price: "₱ 80.00",
+    availableStock: 6,
+    currentSales: "₱ 1,120.00",
+    image: "📓"
   },
-  { 
-    id: 2, 
-    name: "Blue Ballpoint Pens (Pack of 10)", 
-    category: "Writing", 
-    stock: 23, 
-    price: 79.99, 
-    supplier: "PenCorp",
-    status: "Low Stock",
-    lastUpdated: "2024-01-14",
-    image: null
-  },
-  { 
-    id: 3, 
-    name: "Colored Pencil Set (24 colors)", 
-    category: "Art Supplies", 
-    stock: 67, 
-    price: 259.99, 
-    supplier: "ArtWorld",
-    status: "In Stock",
-    lastUpdated: "2024-01-13",
-    image: "/placeholder.svg"
-  },
-  { 
-    id: 4, 
-    name: "Graphite Pencils (Pack of 12)", 
-    category: "Writing", 
-    stock: 5, 
-    price: 99.99, 
-    supplier: "WriteTech",
-    status: "Critical",
-    lastUpdated: "2024-01-12",
-    image: null
-  },
-  { 
-    id: 5, 
-    name: "A4 White Paper (500 sheets)", 
-    category: "Paper", 
-    stock: 89, 
-    price: 179.99, 
-    supplier: "PaperPlus",
-    status: "In Stock",
-    lastUpdated: "2024-01-11",
-    image: "/placeholder.svg"
+  {
+    id: 2,
+    name: "PANDA BALLPEN - BLACK",
+    totalStock: 50,
+    price: "₱ 10.00",
+    availableStock: 10,
+    currentSales: "₱ 400.00",
+    image: "🖊️"
   }
 ];
 
 export default function Inventory() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [stockFilter, setStockFilter] = useState("all");
   const { t } = useLanguage();
-
-  const filteredInventory = mockInventory.filter((item) => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
-    const matchesStock = stockFilter === "all" || 
-      (stockFilter === "low" && item.stock <= 25) ||
-      (stockFilter === "critical" && item.stock <= 10) ||
-      (stockFilter === "in-stock" && item.stock > 25);
-    
-    return matchesSearch && matchesCategory && matchesStock;
-  });
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "In Stock": return "default";
-      case "Low Stock": return "secondary";
-      case "Critical": return "destructive";
-      default: return "default";
-    }
-  };
-
-  const handleImageUpload = (productId: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // In a real app, you would upload to your storage service
-      console.log(`Upload image for product ${productId}:`, file);
-    }
-  };
+  const [showAddForm, setShowAddForm] = useState(false);
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{t('inventoryManagement')}</h1>
-          <p className="text-muted-foreground">{t('manageInventory')}</p>
-        </div>
-        <Button className="md:w-auto">
-          <Plus className="mr-2 h-4 w-4" />
-          {t('addProduct')}
-        </Button>
-      </div>
-
-      {/* Filters */}
-      <Card className="shadow-card border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5 text-primary" />
-            {t('filters')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder={t('searchProducts')}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder={t('category')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t('allCategories')}</SelectItem>
-                <SelectItem value="Notebooks">{t('notebooks')}</SelectItem>
-                <SelectItem value="Writing">{t('writing')}</SelectItem>
-                <SelectItem value="Art Supplies">{t('artSupplies')}</SelectItem>
-                <SelectItem value="Paper">{t('paper')}</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={stockFilter} onValueChange={setStockFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder={t('stockLevel')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t('allStockLevels')}</SelectItem>
-                <SelectItem value="in-stock">{t('inStock')}</SelectItem>
-                <SelectItem value="low">{t('lowStock')}</SelectItem>
-                <SelectItem value="critical">{t('critical')}</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" onClick={() => {
-              setSearchTerm("");
-              setCategoryFilter("all");
-              setStockFilter("all");
-            }}>
-              {t('clearFilters')}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
+    <div className="p-6 space-y-6 bg-gradient-to-br from-background to-accent-light min-h-screen">
       {/* Inventory Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredInventory.map((item) => (
-          <Card key={item.id} className="shadow-card border-0 hover:shadow-soft transition-shadow">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <CardTitle className="text-lg">{item.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">{item.category}</p>
-                </div>
-                <Badge variant={getStatusColor(item.status)}>
-                  {item.status}
-                </Badge>
+      <div className="grid gap-6 md:grid-cols-3">
+        {/* Existing Products */}
+        {mockInventory.map((item) => (
+          <Card key={item.id} className="bg-white shadow-lg border-0">
+            <CardContent className="p-6">
+              <div className="text-center mb-4">
+                <div className="text-4xl mb-2">{item.image}</div>
+                <h3 className="font-bold text-lg">{item.name}</h3>
               </div>
               
-              {/* Product Image */}
-              <div className="mt-4">
-                {item.image ? (
-                  <div className="relative">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-full h-32 object-cover rounded-lg bg-muted"
-                    />
-                    <div className="absolute top-2 right-2">
-                      <label className="cursor-pointer">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => handleImageUpload(item.id, e)}
-                        />
-                        <Button variant="secondary" size="sm">
-                          <Upload className="h-3 w-3" />
-                        </Button>
-                      </label>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center h-32 bg-muted rounded-lg border-2 border-dashed border-muted-foreground/25">
-                    <label className="cursor-pointer flex flex-col items-center gap-2">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => handleImageUpload(item.id, e)}
-                      />
-                      <Image className="h-8 w-8 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">{t('uploadImage')}</span>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
+              <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">{t('stockLevel')}</span>
-                  <span className="font-semibold">{item.stock} {t('units')}</span>
+                  <span>TOTAL STOCK:</span>
+                  <span className="font-semibold">{item.totalStock}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">{t('price')}</span>
-                  <span className="font-semibold">₱{item.price}</span>
+                  <span>PRICE:</span>
+                  <span className="font-semibold">{item.price}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">{t('supplier')}</span>
-                  <span className="text-sm">{item.supplier}</span>
+                  <span>AVAILABLE STOCK:</span>
+                  <span className="font-semibold">{item.availableStock}</span>
                 </div>
-                <div className="flex gap-2 pt-3">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <Edit className="mr-1 h-3 w-3" />
-                    {t('edit')}
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <Package className="mr-1 h-3 w-3" />
-                    {t('restock')}
-                  </Button>
+                <div className="flex justify-between">
+                  <span>CURRENT SALES:</span>
+                  <span className="font-semibold">{item.currentSales}</span>
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
-      </div>
 
-      {filteredInventory.length === 0 && (
-        <Card className="shadow-card border-0">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Package className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">{t('noProductsFound')}</h3>
-            <p className="text-muted-foreground text-center">
-              {t('tryAdjusting')}
-            </p>
+        {/* Add Product Card */}
+        <Card 
+          className="bg-white shadow-lg border-0 cursor-pointer hover:shadow-xl transition-all group"
+          onClick={() => setShowAddForm(true)}
+        >
+          <CardContent className="p-6 h-full flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-6xl text-primary group-hover:scale-110 transition-transform">
+                ➕
+              </div>
+            </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Add Product Form */}
+      {showAddForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <Card className="max-w-md w-full bg-white shadow-xl">
+            <CardContent className="p-6">
+              <h2 className="text-xl font-bold mb-6 text-center">Add New Product</h2>
+              
+              <div className="space-y-4">
+                <Button
+                  variant="outline"
+                  className="w-full h-16 border-dashed border-2 border-primary/30 text-primary hover:bg-primary/5"
+                >
+                  <Upload className="mr-2 h-5 w-5" />
+                  INPUT IMAGE (OPTIONAL)
+                </Button>
+                
+                <Input placeholder="NAME OF PRODUCT" className="h-12" />
+                <Input placeholder="PRICE OF PRODUCT" className="h-12" />
+                <Input placeholder="MAXIMUM STOCK" className="h-12" />
+                <Input placeholder="MINIMUM STOCK" className="h-12" />
+              </div>
+
+              {/* Steps Guide */}
+              <div className="mt-6 p-4 bg-accent-light rounded-lg">
+                <h3 className="font-bold mb-2">STEPS:</h3>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• Click on input image to add image of product.</li>
+                  <li>• Rename the product to its brand and type of product.</li>
+                  <li>• Add the amount you paid for the product to be sold for.</li>
+                  <li>• Add the maximum stock that can fit in your physical inventory.</li>
+                  <li>• Add minimum stock that can notify you to stock up your inventory.</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowAddForm(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 bg-primary hover:bg-primary/90"
+                  onClick={() => setShowAddForm(false)}
+                >
+                  Add Product
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       )}
     </div>
   );

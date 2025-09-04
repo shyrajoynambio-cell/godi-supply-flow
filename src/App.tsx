@@ -7,8 +7,6 @@ import { MainLayout } from "@/components/layouts/MainLayout";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
-import POS from "./pages/POS";
-import Users from "./pages/Users";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
@@ -24,9 +22,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
               <Route path="inventory" element={<Inventory />} />
-              <Route path="pos" element={<POS />} />
-              <Route path="users" element={<Users />} />
               <Route path="reports" element={<Reports />} />
             </Route>
             <Route path="*" element={<NotFound />} />

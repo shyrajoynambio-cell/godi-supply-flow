@@ -1,160 +1,92 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Package, 
-  ShoppingCart, 
-  Users, 
-  BarChart3,
-  Settings,
-  Menu,
-  X,
-  Languages
-} from "lucide-react";
+import { Outlet, useLocation } from "react-router-dom";
+import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import TutorialOverlay from "@/components/tutorial/TutorialOverlay";
 
 export function MainLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const currentPath = window.location.pathname;
-  const { t, toggleLanguage, language } = useLanguage();
+  const [showTutorial, setShowTutorial] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const { t } = useLanguage();
 
   const navigation = [
-    { name: t('dashboard'), href: "/", icon: LayoutDashboard },
-    { name: t('inventory'), href: "/inventory", icon: Package },
-    { name: t('pos'), href: "/pos", icon: ShoppingCart },
-    { name: t('users'), href: "/users", icon: Users },
-    { name: t('reports'), href: "/reports", icon: BarChart3 },
-    { name: t('settings'), href: "/settings", icon: Settings },
+    { name: "Overview", href: "/" },
+    { name: "Inventory", href: "/inventory" },
+    { name: "Stats", href: "/reports" },
   ];
-
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile sidebar */}
-      <div className={cn(
-        "fixed inset-0 z-50 lg:hidden",
-        sidebarOpen ? "block" : "hidden"
-      )}>
-        <div className="fixed inset-0 bg-black/20" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed left-0 top-0 h-full w-64 bg-card shadow-soft">
-          <div className="flex h-16 items-center justify-between px-6">
-            <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              G.O.D.I
-            </h1>
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <X className="h-5 w-5" />
-            </Button>
+      {/* Header */}
+      <header className="bg-primary text-primary-foreground shadow-lg">
+        <div className="flex items-center justify-between px-6 py-4">
+          {/* Store Logo and Info */}
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
+              <span className="text-secondary-foreground font-bold text-lg">📦</span>
+            </div>
+            <div>
+              <h1 className="font-bold text-lg">name of store</h1>
+              <p className="text-sm text-primary-foreground/80">📍 address of store</p>
+            </div>
           </div>
-          <nav className="mt-8 px-4 flex-1">
+
+          {/* Navigation */}
+          <nav className="flex items-center gap-8">
             {navigation.map((item) => {
-              const isActive = currentPath === item.href;
+              const isActive = currentPath === item.href || 
+                              (item.href === "/" && currentPath === "/dashboard");
               return (
                 <a
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "flex items-center rounded-xl px-4 py-3 mb-2 text-sm font-medium transition-all",
+                    "px-6 py-2 rounded-lg font-medium transition-all",
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-soft"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      ? "bg-primary-foreground text-primary"
+                      : "text-primary-foreground/80 hover:bg-primary-foreground/10"
                   )}
                 >
-                  <item.icon className="mr-3 h-5 w-5" />
                   {item.name}
                 </a>
               );
             })}
           </nav>
-          
-          {/* Language Toggle */}
-          <div className="px-4 pb-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleLanguage}
-              className="w-full"
-            >
-              <Languages className="mr-2 h-4 w-4" />
-              {language === 'en' ? 'Filipino' : 'English'}
-            </Button>
-          </div>
-        </div>
-      </div>
 
-      {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-card shadow-card border-r">
-          <div className="flex h-16 items-center px-6">
-            <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              G.O.D.I
-            </h1>
-          </div>
-          <nav className="mt-8 flex-1 px-4">
-            {navigation.map((item) => {
-              const isActive = currentPath === item.href;
-              return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center rounded-xl px-4 py-3 mb-2 text-sm font-medium transition-all",
-                    isActive
-                      ? "bg-primary text-primary-foreground shadow-soft"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
-                >
-                  <item.icon className="mr-3 h-5 w-5" />
-                  {item.name}
-                </a>
-              );
-            })}
-          </nav>
-          
-          {/* Language Toggle */}
-          <div className="px-4 pb-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleLanguage}
-              className="w-full"
-            >
-              <Languages className="mr-2 h-4 w-4" />
-              {language === 'en' ? 'Filipino' : 'English'}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main content */}
-      <div className="lg:pl-64">
-        {/* Mobile header */}
-        <div className="sticky top-0 z-40 flex h-16 bg-card/80 backdrop-blur-sm shadow-sm border-b lg:hidden">
+          {/* Settings */}
           <Button
             variant="ghost"
             size="sm"
-            className="ml-4"
-            onClick={() => setSidebarOpen(true)}
+            className="text-primary-foreground hover:bg-primary-foreground/10"
           >
-            <Menu className="h-6 w-6" />
+            <Settings className="h-5 w-5" />
           </Button>
-          <div className="flex-1 px-4 flex items-center">
-            <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              G.O.D.I
-            </h1>
-          </div>
         </div>
+      </header>
 
-        {/* Page content */}
-        <main className="flex-1">
-          <Outlet />
-        </main>
-      </div>
+      {/* Main content */}
+      <main className="relative">
+        <Outlet />
+        
+        {/* Neko Cat Mascot - Tutorial Trigger */}
+        <div className="fixed bottom-6 right-6 z-40">
+          <button
+            onClick={() => setShowTutorial(true)}
+            className="w-16 h-16 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+            title="Click for tutorial"
+          >
+            <div className="text-3xl group-hover:scale-110 transition-transform">🐱</div>
+          </button>
+        </div>
+      </main>
+
+      {/* Tutorial Overlay */}
+      {showTutorial && (
+        <TutorialOverlay onClose={() => setShowTutorial(false)} />
+      )}
     </div>
   );
 }

@@ -8,60 +8,60 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* G.O.D.I Design System - Soft & Modern Palette */
-    --background: 214 100% 97%;
-    --foreground: 213 27% 14%;
+    /* G.O.D.I Design System - Teal/Turquoise Theme */
+    --background: 174 100% 94%;
+    --foreground: 180 25% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 213 27% 14%;
+    --card-foreground: 180 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 213 27% 14%;
+    --popover-foreground: 180 25% 15%;
 
-    /* Primary - Soft Blue */
-    --primary: 213 94% 68%;
+    /* Primary - Teal */
+    --primary: 174 83% 47%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 213 94% 60%;
-    --primary-light: 213 100% 95%;
+    --primary-hover: 174 83% 40%;
+    --primary-light: 174 100% 90%;
 
-    /* Secondary - Soft Green */
-    --secondary: 152 69% 74%;
+    /* Secondary - Orange */
+    --secondary: 25 95% 53%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 152 69% 66%;
-    --secondary-light: 152 100% 95%;
+    --secondary-hover: 25 95% 45%;
+    --secondary-light: 25 100% 92%;
 
-    /* Muted - Warm Gray */
-    --muted: 213 27% 96%;
-    --muted-foreground: 213 10% 45%;
+    /* Muted - Light Teal */
+    --muted: 174 50% 88%;
+    --muted-foreground: 180 15% 45%;
 
-    /* Accent - Soft Purple */
-    --accent: 266 85% 82%;
-    --accent-foreground: 266 15% 15%;
-    --accent-light: 266 100% 97%;
+    /* Accent - Soft Teal */
+    --accent: 174 60% 75%;
+    --accent-foreground: 180 25% 15%;
+    --accent-light: 174 100% 95%;
 
-    /* Warning - Soft Orange */
-    --warning: 31 81% 72%;
+    /* Warning - Bright Orange */
+    --warning: 25 95% 53%;
     --warning-foreground: 0 0% 100%;
-    --warning-light: 31 100% 96%;
+    --warning-light: 25 100% 92%;
 
-    /* Success - Enhanced Green */
-    --success: 142 71% 65%;
+    /* Success - Green */
+    --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
-    --success-light: 142 100% 95%;
+    --success-light: 142 100% 90%;
 
-    /* Destructive - Soft Red */
-    --destructive: 0 84% 73%;
+    /* Destructive - Red */
+    --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 213 27% 88%;
-    --input: 213 27% 92%;
-    --ring: 213 94% 68%;
+    --border: 174 30% 80%;
+    --input: 174 30% 85%;
+    --ring: 174 83% 47%;
 
     /* Custom G.O.D.I Variables */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
     --gradient-soft: linear-gradient(135deg, hsl(var(--primary-light)), hsl(var(--accent-light)));
     --shadow-soft: 0 4px 20px -4px hsl(var(--primary) / 0.15);
-    --shadow-card: 0 2px 8px -1px hsl(213 27% 84% / 0.3);
+    --shadow-card: 0 2px 8px -1px hsl(174 30% 75% / 0.3);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;

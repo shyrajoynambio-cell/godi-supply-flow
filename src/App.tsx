@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "@/components/layouts/MainLayout";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { StoreProvider } from "@/contexts/StoreContext";
 import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import Reports from "./pages/Reports";
@@ -16,9 +17,10 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <LanguageProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+        <StoreProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Dashboard />} />
@@ -29,6 +31,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </StoreProvider>
       </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>

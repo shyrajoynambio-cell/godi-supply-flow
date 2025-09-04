@@ -14,7 +14,9 @@ const mockInventory = [
     price: "₱ 80.00",
     availableStock: 6,
     currentSales: "₱ 1,120.00",
-    image: "📓"
+    image: "📓",
+    minStock: 5,
+    maxStock: 25
   },
   {
     id: 2,
@@ -23,7 +25,20 @@ const mockInventory = [
     price: "₱ 10.00",
     availableStock: 10,
     currentSales: "₱ 400.00",
-    image: "🖊️"
+    image: "🖊️",
+    minStock: 8,
+    maxStock: 45
+  },
+  {
+    id: 3,
+    name: "COLORED PENCILS",
+    totalStock: 30,
+    price: "₱ 120.00",
+    availableStock: 35,
+    currentSales: "₱ 600.00",
+    image: "🖍️",
+    minStock: 10,
+    maxStock: 30
   }
 ];
 
@@ -31,40 +46,86 @@ export default function Inventory() {
   const { t } = useLanguage();
   const [showAddForm, setShowAddForm] = useState(false);
 
+  const getStockStatus = (item: typeof mockInventory[0]) => {
+    if (item.availableStock > item.maxStock) {
+      return { status: 'overstock', color: 'warning' };
+    } else if (item.availableStock <= item.minStock) {
+      return { status: 'understock', color: 'destructive' };
+    } else {
+      return { status: 'normal', color: 'success' };
+    }
+  };
+
   return (
     <div className="p-6 space-y-6 bg-gradient-to-br from-background to-accent-light min-h-screen">
       {/* Inventory Grid */}
       <div className="grid gap-6 md:grid-cols-3">
         {/* Existing Products */}
-        {mockInventory.map((item) => (
-          <Card key={item.id} className="bg-white shadow-lg border-0">
-            <CardContent className="p-6">
-              <div className="text-center mb-4">
-                <div className="text-4xl mb-2">{item.image}</div>
-                <h3 className="font-bold text-lg">{item.name}</h3>
-              </div>
-              
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>TOTAL STOCK:</span>
-                  <span className="font-semibold">{item.totalStock}</span>
+        {mockInventory.map((item) => {
+          const stockStatus = getStockStatus(item);
+          return (
+            <Card key={item.id} className="bg-white shadow-lg border-0 relative">
+              <CardContent className="p-6">
+                {/* Stock Status Alert */}
+                {stockStatus.status !== 'normal' && (
+                  <div className="absolute top-2 right-2">
+                    <Badge 
+                      variant={stockStatus.color as any}
+                      className="text-xs font-bold"
+                    >
+                      {stockStatus.status === 'overstock' ? '⚠️ OVERSTOCK' : '⚠️ UNDERSTOCK'}
+                    </Badge>
+                  </div>
+                )}
+                
+                <div className="text-center mb-4">
+                  <div className="text-4xl mb-2">{item.image}</div>
+                  <h3 className="font-bold text-lg">{item.name}</h3>
                 </div>
-                <div className="flex justify-between">
-                  <span>PRICE:</span>
-                  <span className="font-semibold">{item.price}</span>
+                
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>TOTAL STOCK:</span>
+                    <span className="font-semibold">{item.totalStock}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>PRICE:</span>
+                    <span className="font-semibold">{item.price}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>AVAILABLE STOCK:</span>
+                    <span className={`font-semibold ${
+                      stockStatus.status === 'overstock' ? 'text-warning' : 
+                      stockStatus.status === 'understock' ? 'text-destructive' : 
+                      'text-success'
+                    }`}>
+                      {item.availableStock}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>CURRENT SALES:</span>
+                    <span className="font-semibold">{item.currentSales}</span>
+                  </div>
+                  
+                  {/* Stock Alert Details */}
+                  {stockStatus.status !== 'normal' && (
+                    <div className="mt-3 p-2 bg-muted/20 rounded text-xs">
+                      {stockStatus.status === 'overstock' ? (
+                        <p className="text-warning">
+                          ⚠️ Stock exceeds maximum limit of {item.maxStock}
+                        </p>
+                      ) : (
+                        <p className="text-destructive">
+                          ⚠️ Stock below minimum requirement of {item.minStock}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <div className="flex justify-between">
-                  <span>AVAILABLE STOCK:</span>
-                  <span className="font-semibold">{item.availableStock}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>CURRENT SALES:</span>
-                  <span className="font-semibold">{item.currentSales}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          );
+        })}
 
         {/* Add Product Card */}
         <Card 

@@ -1,16 +1,35 @@
 import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Settings } from "lucide-react";
+import { Settings, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useStore } from "@/contexts/StoreContext";
 import TutorialOverlay from "@/components/tutorial/TutorialOverlay";
 
 export function MainLayout() {
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showStoreSettings, setShowStoreSettings] = useState(false);
+  const [tempStoreName, setTempStoreName] = useState('');
+  const [tempStoreAddress, setTempStoreAddress] = useState('');
   const location = useLocation();
   const currentPath = location.pathname;
   const { t } = useLanguage();
+  const { storeName, storeAddress, setStoreName, setStoreAddress } = useStore();
+
+  const handleEditStore = () => {
+    setTempStoreName(storeName);
+    setTempStoreAddress(storeAddress);
+    setShowStoreSettings(true);
+  };
+
+  const handleSaveStore = () => {
+    setStoreName(tempStoreName);
+    setStoreAddress(tempStoreAddress);
+    setShowStoreSettings(false);
+  };
 
   const navigation = [
     { name: "Overview", href: "/" },
@@ -25,12 +44,24 @@ export function MainLayout() {
         <div className="flex items-center justify-between px-6 py-4">
           {/* Store Logo and Info */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
-              <span className="text-secondary-foreground font-bold text-lg">📦</span>
+            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded flex items-center justify-center">
+                <span className="text-white font-bold text-xs">📦</span>
+              </div>
             </div>
-            <div>
-              <h1 className="font-bold text-lg">name of store</h1>
-              <p className="text-sm text-primary-foreground/80">📍 address of store</p>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h1 className="font-bold text-lg">{storeName}</h1>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleEditStore}
+                  className="text-primary-foreground/60 hover:text-primary-foreground hover:bg-primary-foreground/10 p-1"
+                >
+                  <Edit className="h-3 w-3" />
+                </Button>
+              </div>
+              <p className="text-sm text-primary-foreground/80">📍 {storeAddress}</p>
             </div>
           </div>
 
@@ -82,6 +113,53 @@ export function MainLayout() {
           </button>
         </div>
       </main>
+
+      {/* Store Settings Modal */}
+      {showStoreSettings && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <Card className="max-w-md w-full bg-white shadow-xl">
+            <CardContent className="p-6">
+              <h2 className="text-xl font-bold mb-6 text-center">Store Settings</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Store Name</label>
+                  <Input
+                    value={tempStoreName}
+                    onChange={(e) => setTempStoreName(e.target.value)}
+                    placeholder="Enter store name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Store Address</label>
+                  <Input
+                    value={tempStoreAddress}
+                    onChange={(e) => setTempStoreAddress(e.target.value)}
+                    placeholder="Enter store address"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowStoreSettings(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 bg-primary hover:bg-primary/90"
+                  onClick={handleSaveStore}
+                >
+                  Save Changes
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Tutorial Overlay */}
       {showTutorial && (

@@ -2,41 +2,44 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TutorialOverlayProps {
   onClose: () => void;
 }
 
-const tutorialSteps = [
-  {
-    title: "WELCOME TO GODI!",
-    content: "I am your assistant, Neko! Would you like to experience a tutorial phase?",
-    showButtons: true,
-  },
-  {
-    title: "Overview Section",
-    content: "In the overview section, you can see your stock alerts, total stocks, sales information, and welcome message.",
-    showButtons: false,
-  },
-  {
-    title: "Inventory Management",
-    content: "In the inventory section, click the box with a plus icon to input a product.",
-    showButtons: false,
-  },
-  {
-    title: "Product Form",
-    content: "STEPS:\n• Click on input image to add image of product.\n• Rename the product to its brand and type of product.\n• Add the amount you paid for the product to be sold for.\n• Add the maximum stock that can fit in your physical inventory.\n• Add minimum stock that can notify you to stock up your inventory.",
-    showButtons: false,
-  },
-  {
-    title: "Stats Section",
-    content: "View your sales trends, top categories, and business analytics in the Stats section.",
-    showButtons: false,
-  },
-];
 
 export default function TutorialOverlay({ onClose }: TutorialOverlayProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const { t } = useLanguage();
+
+  const tutorialSteps = [
+    {
+      title: t('tutorialWelcome'),
+      content: t('tutorialIntro'),
+      showButtons: true,
+    },
+    {
+      title: t('tutorialOverview'),
+      content: t('tutorialOverviewDesc'),
+      showButtons: false,
+    },
+    {
+      title: t('tutorialInventory'),
+      content: t('tutorialInventoryDesc'),
+      showButtons: false,
+    },
+    {
+      title: t('tutorialProductForm'),
+      content: t('tutorialProductFormDesc'),
+      showButtons: false,
+    },
+    {
+      title: t('tutorialStats'),
+      content: t('tutorialStatsDesc'),
+      showButtons: false,
+    },
+  ];
 
   const handleNext = () => {
     if (currentStep < tutorialSteps.length - 1) {
@@ -97,32 +100,32 @@ export default function TutorialOverlay({ onClose }: TutorialOverlayProps) {
                   onClick={handleStart}
                   className="bg-success hover:bg-success/90 text-success-foreground px-8"
                 >
-                  YES
+                  {t('yes')}
                 </Button>
                 <Button
                   onClick={onClose}
                   className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8"
                 >
-                  NO
+                  {t('no')}
                 </Button>
               </>
             ) : (
               <div className="flex gap-2">
                 {currentStep > 1 && (
+                    <Button
+                      onClick={handlePrevious}
+                      variant="outline"
+                      className="px-6"
+                    >
+                      {t('previous')}
+                    </Button>
+                  )}
                   <Button
-                    onClick={handlePrevious}
-                    variant="outline"
-                    className="px-6"
+                    onClick={handleNext}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
                   >
-                    Previous
+                    {currentStep === tutorialSteps.length - 1 ? t('finish') : t('next')}
                   </Button>
-                )}
-                <Button
-                  onClick={handleNext}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
-                >
-                  {currentStep === tutorialSteps.length - 1 ? "Finish" : "Next"}
-                </Button>
               </div>
             )}
           </div>

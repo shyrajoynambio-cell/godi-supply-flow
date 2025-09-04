@@ -69,6 +69,23 @@ const translations = {
     tryAdjusting: 'Try adjusting your search or filter criteria',
     units: 'units',
     each: 'each',
+    
+    // Tutorial
+    tutorialWelcome: 'WELCOME TO GODI!',
+    tutorialIntro: "I am your assistant, Neko! Would you like to experience a tutorial phase?",
+    tutorialOverview: 'Overview Section',
+    tutorialOverviewDesc: 'In the overview section, you can see your stock alerts, total stocks, sales information, and welcome message.',
+    tutorialInventory: 'Inventory Management',
+    tutorialInventoryDesc: 'In the inventory section, click the box with a plus icon to input a product.',
+    tutorialProductForm: 'Product Form',
+    tutorialProductFormDesc: "STEPS:\n• Click on input image to add image of product.\n• Rename the product to its brand and type of product.\n• Add the amount you paid for the product to be sold for.\n• Add the maximum stock that can fit in your physical inventory.\n• Add minimum stock that can notify you to stock up your inventory.",
+    tutorialStats: 'Stats Section',
+    tutorialStatsDesc: 'View your sales trends, top categories, and business analytics in the Stats section.',
+    yes: 'YES',
+    no: 'NO',
+    previous: 'Previous',
+    next: 'Next',
+    finish: 'Finish',
   },
   fil: {
     // Navigation
@@ -130,6 +147,23 @@ const translations = {
     tryAdjusting: 'Subukan na ayusin ang inyong paghahanap o filter',
     units: 'piraso',
     each: 'bawat isa',
+    
+    // Tutorial
+    tutorialWelcome: 'MALIGAYANG PAGDATING SA GODI!',
+    tutorialIntro: "Ako si Neko, ang inyong katulong! Gusto ninyo ba ng tutorial?",
+    tutorialOverview: 'Overview Section',
+    tutorialOverviewDesc: 'Sa overview section, makikita ninyo ang mga stock alerts, kabuuang stocks, impormasyon sa benta, at welcome message.',
+    tutorialInventory: 'Pamamahala ng Imbentaryo',
+    tutorialInventoryDesc: 'Sa inventory section, i-click ang box na may plus icon para magdagdag ng produkto.',
+    tutorialProductForm: 'Product Form',
+    tutorialProductFormDesc: "MGA HAKBANG:\n• I-click ang input image para magdagdag ng larawan ng produkto.\n• Baguhin ang pangalan ng produkto ayon sa brand at uri nito.\n• Idagdag ang halaga na ibebenta ninyo.\n• Idagdag ang maximum stock na kasya sa inyong physical inventory.\n• Idagdag ang minimum stock na mag-aabiso sa inyo na mag-restock.",
+    tutorialStats: 'Stats Section',
+    tutorialStatsDesc: 'Tingnan ang inyong sales trends, top categories, at business analytics sa Stats section.',
+    yes: 'OO',
+    no: 'HINDI',
+    previous: 'Nakaraan',
+    next: 'Susunod',
+    finish: 'Tapos',
   }
 };
 

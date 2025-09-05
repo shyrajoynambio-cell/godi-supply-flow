@@ -5,8 +5,21 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Upload } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "sonner";
 
-const mockInventory = [
+interface Product {
+  id: number;
+  name: string;
+  totalStock: number;
+  price: string;
+  availableStock: number;
+  currentSales: string;
+  image: string;
+  minStock: number;
+  maxStock: number;
+}
+
+const initialInventory: Product[] = [
   {
     id: 1,
     name: "SPIRAL NOTEBOOK",
@@ -44,9 +57,17 @@ const mockInventory = [
 
 export default function Inventory() {
   const { t } = useLanguage();
+  const [inventory, setInventory] = useState<Product[]>(initialInventory);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    maxStock: "",
+    minStock: "",
+    image: "📦"
+  });
 
-  const getStockStatus = (item: typeof mockInventory[0]) => {
+  const getStockStatus = (item: Product) => {
     if (item.availableStock > item.maxStock) {
       return { status: 'overstock', color: 'warning' };
     } else if (item.availableStock <= item.minStock) {
@@ -56,12 +77,59 @@ export default function Inventory() {
     }
   };
 
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleAddProduct = () => {
+    // Validate form
+    if (!formData.name.trim()) {
+      toast.error("Please enter product name");
+      return;
+    }
+    if (!formData.price.trim()) {
+      toast.error("Please enter product price");
+      return;
+    }
+    if (!formData.maxStock.trim() || isNaN(Number(formData.maxStock))) {
+      toast.error("Please enter valid maximum stock");
+      return;
+    }
+    if (!formData.minStock.trim() || isNaN(Number(formData.minStock))) {
+      toast.error("Please enter valid minimum stock");
+      return;
+    }
+
+    const newProduct: Product = {
+      id: Math.max(...inventory.map(p => p.id)) + 1,
+      name: formData.name.toUpperCase(),
+      totalStock: Number(formData.maxStock),
+      price: `₱ ${parseFloat(formData.price).toFixed(2)}`,
+      availableStock: Number(formData.maxStock),
+      currentSales: "₱ 0.00",
+      image: formData.image,
+      minStock: Number(formData.minStock),
+      maxStock: Number(formData.maxStock)
+    };
+
+    setInventory(prev => [...prev, newProduct]);
+    setFormData({
+      name: "",
+      price: "",
+      maxStock: "",
+      minStock: "",
+      image: "📦"
+    });
+    setShowAddForm(false);
+    toast.success("Product added successfully!");
+  };
+
   return (
     <div className="p-6 space-y-6 bg-gradient-to-br from-background to-accent-light min-h-screen">
       {/* Inventory Grid */}
       <div className="grid gap-6 md:grid-cols-3">
         {/* Existing Products */}
-        {mockInventory.map((item) => {
+        {inventory.map((item) => {
           const stockStatus = getStockStatus(item);
           return (
             <Card key={item.id} className="bg-white shadow-lg border-0 relative">
@@ -158,10 +226,33 @@ export default function Inventory() {
                   INPUT IMAGE (OPTIONAL)
                 </Button>
                 
-                <Input placeholder="NAME OF PRODUCT" className="h-12" />
-                <Input placeholder="PRICE OF PRODUCT" className="h-12" />
-                <Input placeholder="MAXIMUM STOCK" className="h-12" />
-                <Input placeholder="MINIMUM STOCK" className="h-12" />
+                <Input 
+                  placeholder="NAME OF PRODUCT" 
+                  className="h-12" 
+                  value={formData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                />
+                <Input 
+                  placeholder="PRICE OF PRODUCT" 
+                  className="h-12" 
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => handleInputChange('price', e.target.value)}
+                />
+                <Input 
+                  placeholder="MAXIMUM STOCK" 
+                  className="h-12" 
+                  type="number"
+                  value={formData.maxStock}
+                  onChange={(e) => handleInputChange('maxStock', e.target.value)}
+                />
+                <Input 
+                  placeholder="MINIMUM STOCK" 
+                  className="h-12" 
+                  type="number"
+                  value={formData.minStock}
+                  onChange={(e) => handleInputChange('minStock', e.target.value)}
+                />
               </div>
 
               {/* Steps Guide */}
@@ -186,7 +277,7 @@ export default function Inventory() {
                 </Button>
                 <Button 
                   className="flex-1 bg-primary hover:bg-primary/90"
-                  onClick={() => setShowAddForm(false)}
+                  onClick={handleAddProduct}
                 >
                   Add Product
                 </Button>

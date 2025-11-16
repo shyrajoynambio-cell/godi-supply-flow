@@ -15,10 +15,10 @@ const salesData = [
 ];
 
 const topCategories = [
-  { category: "Writing Supplies", percentage: 35, revenue: "$8,450", color: "primary" },
-  { category: "Notebooks", percentage: 28, revenue: "$6,720", color: "secondary" }, 
-  { category: "Art Supplies", percentage: 22, revenue: "$5,280", color: "accent" },
-  { category: "Paper Products", percentage: 15, revenue: "$3,600", color: "warning" }
+  { category: "Writing Supplies", percentage: 35, revenue: "₱8,450", color: "primary" },
+  { category: "Notebooks", percentage: 28, revenue: "₱6,720", color: "secondary" }, 
+  { category: "Art Supplies", percentage: 22, revenue: "₱5,280", color: "accent" },
+  { category: "Paper Products", percentage: 15, revenue: "₱3,600", color: "warning" }
 ];
 
 const supplierPerformance = [
@@ -69,7 +69,7 @@ export default function Reports() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
-                <p className="text-2xl font-bold">$89,250</p>
+                <p className="text-2xl font-bold">₱89,250</p>
                 <p className="text-sm text-success">+12.5% from last period</p>
               </div>
               <div className="p-3 bg-primary-light rounded-lg">
@@ -99,7 +99,7 @@ export default function Reports() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Avg. Order Value</p>
-                <p className="text-2xl font-bold">$9.99</p>
+                <p className="text-2xl font-bold">₱124.50</p>
                 <p className="text-sm text-success">+3.8% from last period</p>
               </div>
               <div className="p-3 bg-accent-light rounded-lg">
@@ -148,7 +148,7 @@ export default function Reports() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold">${data.sales.toLocaleString()}</p>
+                    <p className="text-sm font-semibold">₱{data.sales.toLocaleString()}</p>
                     <p className="text-xs text-muted-foreground">{data.items} items</p>
                   </div>
                 </div>

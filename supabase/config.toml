@@ -1,1 +1,10 @@
 project_id = "fuhazpfvpayiqmhsjvqw"
+
+[functions.products]
+verify_jwt = true
+
+[functions.sales]
+verify_jwt = true
+
+[functions.dashboard-stats]
+verify_jwt = true

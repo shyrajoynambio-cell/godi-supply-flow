@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      products: {
+        Row: {
+          available_stock: number
+          category: Database["public"]["Enums"]["product_category"]
+          created_at: string
+          id: string
+          image: string | null
+          max_stock: number
+          min_stock: number
+          name: string
+          price: number
+          supplier: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          available_stock?: number
+          category: Database["public"]["Enums"]["product_category"]
+          created_at?: string
+          id?: string
+          image?: string | null
+          max_stock: number
+          min_stock?: number
+          name: string
+          price: number
+          supplier?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          available_stock?: number
+          category?: Database["public"]["Enums"]["product_category"]
+          created_at?: string
+          id?: string
+          image?: string | null
+          max_stock?: number
+          min_stock?: number
+          name?: string
+          price?: number
+          supplier?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -50,15 +95,107 @@ export type Database = {
         }
         Relationships: []
       }
+      sales: {
+        Row: {
+          created_at: string
+          id: string
+          payment_method: string | null
+          product_id: string
+          quantity: number
+          subtotal: number
+          tax: number
+          total: number
+          transaction_date: string
+          unit_price: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payment_method?: string | null
+          product_id: string
+          quantity: number
+          subtotal: number
+          tax?: number
+          total: number
+          transaction_date?: string
+          unit_price: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payment_method?: string | null
+          product_id?: string
+          quantity?: number
+          subtotal?: number
+          tax?: number
+          total?: number
+          transaction_date?: string
+          unit_price?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          created_at: string
+          id: string
+          payment_method: string | null
+          status: string | null
+          subtotal: number
+          tax: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payment_method?: string | null
+          status?: string | null
+          subtotal: number
+          tax: number
+          total: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payment_method?: string | null
+          status?: string | null
+          subtotal?: number
+          tax?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_stock_status: {
+        Args: { available: number; max_stock: number; min_stock: number }
+        Returns: Database["public"]["Enums"]["stock_status"]
+      }
     }
     Enums: {
-      [_ in never]: never
+      product_category:
+        | "Notebooks"
+        | "Writing"
+        | "Art Supplies"
+        | "Paper"
+        | "Accessories"
+      stock_status: "in_stock" | "low_stock" | "overstock" | "out_of_stock"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -185,6 +322,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      product_category: [
+        "Notebooks",
+        "Writing",
+        "Art Supplies",
+        "Paper",
+        "Accessories",
+      ],
+      stock_status: ["in_stock", "low_stock", "overstock", "out_of_stock"],
+    },
   },
 } as const

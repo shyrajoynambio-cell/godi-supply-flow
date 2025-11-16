@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
 import { Settings, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import TutorialOverlay from "@/components/tutorial/TutorialOverlay";
 export function MainLayout() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [showStoreSettings, setShowStoreSettings] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [tempStoreName, setTempStoreName] = useState('');
   const [tempStoreAddress, setTempStoreAddress] = useState('');
   const location = useLocation();
@@ -71,9 +72,9 @@ export function MainLayout() {
               const isActive = currentPath === item.href || 
                               (item.href === "/" && currentPath === "/dashboard");
               return (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className={cn(
                     "px-6 py-2 rounded-lg font-medium transition-all",
                     isActive
@@ -82,7 +83,7 @@ export function MainLayout() {
                   )}
                 >
                   {item.name}
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -91,11 +92,20 @@ export function MainLayout() {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => setShowSettings(!showSettings)}
             className="text-primary-foreground hover:bg-primary-foreground/10"
           >
             <Settings className="h-5 w-5" />
           </Button>
         </div>
+
+        {/* Settings Dropdown */}
+        {showSettings && (
+          <div className="absolute right-6 top-20 bg-white rounded-lg shadow-xl border border-border p-4 z-50 min-w-[200px]">
+            <p className="text-sm font-medium mb-2">Settings</p>
+            <p className="text-xs text-muted-foreground">Settings panel coming soon!</p>
+          </div>
+        )}
       </header>
 
       {/* Main content */}

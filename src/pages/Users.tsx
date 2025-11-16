@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Users as UsersIcon, UserPlus, Shield, User, Crown } from "lucide-react";
+import { toast } from "sonner";
 
 const users = [
   {
@@ -62,6 +63,10 @@ const getRoleColor = (role: string) => {
 };
 
 export default function Users() {
+  const handleAddUser = () => {
+    toast.info("Add user feature coming soon!");
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -70,7 +75,7 @@ export default function Users() {
           <h1 className="text-3xl font-bold">User Management</h1>
           <p className="text-muted-foreground">Manage staff accounts and permissions</p>
         </div>
-        <Button className="md:w-auto">
+        <Button onClick={handleAddUser} className="md:w-auto">
           <UserPlus className="mr-2 h-4 w-4" />
           Add User
         </Button>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,13 @@ const initialInventory: Product[] = [
 
 export default function Inventory() {
   const { t } = useLanguage();
-  const [inventory, setInventory] = useState<Product[]>(initialInventory);
+  
+  // Load inventory from localStorage or use initial data
+  const [inventory, setInventory] = useState<Product[]>(() => {
+    const saved = localStorage.getItem('inventory');
+    return saved ? JSON.parse(saved) : initialInventory;
+  });
+  
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -66,6 +72,11 @@ export default function Inventory() {
     minStock: "",
     image: "📦"
   });
+
+  // Save inventory to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+  }, [inventory]);
 
   const getStockStatus = (item: Product) => {
     if (item.availableStock > item.maxStock) {

@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BarChart3, TrendingUp, Download, Calendar, DollarSign, Package, ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
 
 const salesData = [
   { month: "Jan", sales: 12400, items: 1240 },
@@ -27,6 +29,12 @@ const supplierPerformance = [
 ];
 
 export default function Reports() {
+  const [timePeriod, setTimePeriod] = useState("6months");
+
+  const handleExport = () => {
+    toast.success("Exporting report data...");
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -36,7 +44,7 @@ export default function Reports() {
           <p className="text-muted-foreground">Insights into your business performance</p>
         </div>
         <div className="flex gap-3">
-          <Select defaultValue="6months">
+          <Select value={timePeriod} onValueChange={setTimePeriod}>
             <SelectTrigger className="w-40">
               <SelectValue placeholder="Time Period" />
             </SelectTrigger>
@@ -47,7 +55,7 @@ export default function Reports() {
               <SelectItem value="1year">Last Year</SelectItem>
             </SelectContent>
           </Select>
-          <Button>
+          <Button onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>

@@ -187,6 +187,10 @@ export type Database = {
         Args: { available: number; max_stock: number; min_stock: number }
         Returns: Database["public"]["Enums"]["stock_status"]
       }
+      update_product_stock: {
+        Args: { product_id: string; quantity_sold: number }
+        Returns: undefined
+      }
     }
     Enums: {
       product_category:

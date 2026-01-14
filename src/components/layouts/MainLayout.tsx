@@ -36,6 +36,7 @@ export function MainLayout() {
     { name: "Overview", href: "/" },
     { name: "Inventory", href: "/inventory" },
     { name: "Stats", href: "/reports" },
+    { name: "Settings", href: "/settings" },
   ];
 
   return (

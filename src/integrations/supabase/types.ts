@@ -16,164 +16,90 @@ export type Database = {
     Tables: {
       products: {
         Row: {
-          available_stock: number
-          category: Database["public"]["Enums"]["product_category"]
+          category: string
           created_at: string
+          description: string | null
           id: string
           image: string | null
-          max_stock: number
-          min_stock: number
           name: string
           price: number
-          supplier: string | null
+          stock_quantity: number
           updated_at: string
           user_id: string
         }
         Insert: {
-          available_stock?: number
-          category: Database["public"]["Enums"]["product_category"]
+          category: string
           created_at?: string
+          description?: string | null
           id?: string
           image?: string | null
-          max_stock: number
-          min_stock?: number
           name: string
           price: number
-          supplier?: string | null
+          stock_quantity?: number
           updated_at?: string
           user_id: string
         }
         Update: {
-          available_stock?: number
-          category?: Database["public"]["Enums"]["product_category"]
+          category?: string
           created_at?: string
+          description?: string | null
           id?: string
           image?: string | null
-          max_stock?: number
-          min_stock?: number
           name?: string
           price?: number
-          supplier?: string | null
+          stock_quantity?: number
           updated_at?: string
           user_id?: string
         }
         Relationships: []
       }
-      profiles: {
+      user_roles: {
         Row: {
           created_at: string
-          display_name: string | null
-          email: string | null
           id: string
-          max_products: number | null
-          notification_sound: boolean | null
-          role: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          last_login: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
-          display_name?: string | null
-          email?: string | null
+          email: string
+          full_name?: string | null
           id?: string
-          max_products?: number | null
-          notification_sound?: boolean | null
-          role?: string | null
+          last_login?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
-          display_name?: string | null
-          email?: string | null
+          email?: string
+          full_name?: string | null
           id?: string
-          max_products?: number | null
-          notification_sound?: boolean | null
-          role?: string | null
+          last_login?: string | null
           updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      sales: {
-        Row: {
-          created_at: string
-          id: string
-          payment_method: string | null
-          product_id: string
-          quantity: number
-          subtotal: number
-          tax: number
-          total: number
-          transaction_date: string
-          unit_price: number
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          payment_method?: string | null
-          product_id: string
-          quantity: number
-          subtotal: number
-          tax?: number
-          total: number
-          transaction_date?: string
-          unit_price: number
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          payment_method?: string | null
-          product_id?: string
-          quantity?: number
-          subtotal?: number
-          tax?: number
-          total?: number
-          transaction_date?: string
-          unit_price?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "sales_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      transactions: {
-        Row: {
-          created_at: string
-          id: string
-          payment_method: string | null
-          status: string | null
-          subtotal: number
-          tax: number
-          total: number
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          payment_method?: string | null
-          status?: string | null
-          subtotal: number
-          tax: number
-          total: number
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          payment_method?: string | null
-          status?: string | null
-          subtotal?: number
-          tax?: number
-          total?: number
           user_id?: string
         }
         Relationships: []
@@ -187,12 +113,24 @@ export type Database = {
         Args: { available: number; max_stock: number; min_stock: number }
         Returns: Database["public"]["Enums"]["stock_status"]
       }
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       update_product_stock: {
         Args: { product_id: string; quantity_sold: number }
         Returns: undefined
       }
     }
     Enums: {
+      app_role: "admin" | "staff" | "viewer"
       product_category:
         | "Notebooks"
         | "Writing"
@@ -327,6 +265,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "staff", "viewer"],
       product_category: [
         "Notebooks",
         "Writing",

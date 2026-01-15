@@ -24,7 +24,6 @@ export type Database = {
           name: string
           price: number
           stock_quantity: number
-          total_sold: number
           updated_at: string
           user_id: string
         }
@@ -37,7 +36,6 @@ export type Database = {
           name: string
           price: number
           stock_quantity?: number
-          total_sold?: number
           updated_at?: string
           user_id: string
         }
@@ -50,53 +48,10 @@ export type Database = {
           name?: string
           price?: number
           stock_quantity?: number
-          total_sold?: number
           updated_at?: string
           user_id?: string
         }
         Relationships: []
-      }
-      sales: {
-        Row: {
-          created_at: string
-          id: string
-          product_id: string
-          quantity_sold: number
-          sale_price: number
-          sold_by: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          product_id: string
-          quantity_sold: number
-          sale_price: number
-          sold_by: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          product_id?: string
-          quantity_sold?: number
-          sale_price?: number
-          sold_by?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "sales_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sales_sold_by_fkey"
-            columns: ["sold_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["user_id"]
-          },
-        ]
       }
       user_roles: {
         Row: {
@@ -154,15 +109,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_sale: {
-        Args: {
-          p_product_id: string
-          p_quantity_sold: number
-          p_sale_price: number
-          p_sold_by: string
-        }
-        Returns: string
-      }
       get_stock_status: {
         Args: { available: number; max_stock: number; min_stock: number }
         Returns: Database["public"]["Enums"]["stock_status"]
